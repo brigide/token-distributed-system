@@ -1,7 +1,8 @@
 import socket
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-  s.connect(("169.254.92.100", 50002))
+  #s.connect(("169.254.92.100", 50002))
+  s.connect(("localhost", 50002))
   print(s)
   #s.sendall(b"Ola, mundo")
   dados = s.recv(1024)

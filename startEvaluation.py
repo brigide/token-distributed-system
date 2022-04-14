@@ -6,8 +6,8 @@ from Evaluation.evaluation import Evaluation
 
 #condition to recieve the port from system args (8080 if none is passed)
 
-#host = 'localhost'
-host = '169.254.92.100'
+host = 'localhost'
+#host = '169.254.92.100'
 port = 50002
 
 parser=argparse.ArgumentParser()
