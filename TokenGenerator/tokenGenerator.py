@@ -2,7 +2,7 @@ import socket
 import time
 from Evaluation.helpers import Helpers
 
-class Evaluation:
+class TokenGenerator:
     """
         Evaluation server class
     """
@@ -51,29 +51,14 @@ class Evaluation:
             and return it's response
         """
         try:
-            request = self.waitMessage(conn, 'waiting for data...') #recieves request from client
-            code, n = Helpers.splitRequest(request)
+            code = self.waitMessage(conn, 'waiting for data...') #recieves request from client
 
-            isValid = Helpers.evaluate(code, n)
+            print(code)
 
-            if not isValid:
-                self.sendMessage(conn, 'error: invalid parameter')
-                self.closeConnection(conn, addr)
-                return
+            self.sendMessage(conn, code)
+            self.closeConnection(conn, addr)
 
-            print('passei caralho')
-
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect(("localhost", 50003))
-                print(s)
-                #s.sendall(b"Ola, mundo")
-                dados = s.recv(1024)
-                print(f"{dados.decode()}")
-                s.sendall(bytes(code, encoding='utf-8'))
-                dados = s.recv(1024)
-                print(f"{dados.decode()}")
-            
-            print("depois de voltar pro server 1")
+            print('Aqui é server 2 porra')
 
         except Exception as error:
             print(error)
