@@ -53,10 +53,14 @@ class TokenGenerator:
         try:
             while True:
                 message = ServerHelper.waitMessage(conn) #recieves request from client
+                if message == '/end':
+                    break
 
                 code, n = Helpers.splitRequest(message)
 
                 ServerHelper.sendMessage(conn, str(Helpers.generateToken(code, n)))
+                
+            ServerHelper.closeConnection(conn, addr)
 
         except Exception as error:
             print(error)

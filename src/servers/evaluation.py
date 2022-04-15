@@ -58,6 +58,10 @@ class Evaluation:
         try:
             while True:
                 request = ServerHelper.waitMessage(conn) #recieves request from client
+                if request == '/end':
+                    ServerHelper.sendRequest(s, request)
+                    break
+
                 code, n = Helpers.splitRequest(request)
 
                 isValid = Helpers.evaluate(code, n)

@@ -47,4 +47,7 @@ def test():
     print('token count: ' + str(i))
     print('average tokens per second: ' + str(i / seconds))
 
+    s.sendall(bytes('/end', encoding='utf-8'))
+    s.close()
+
 test()

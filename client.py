@@ -10,5 +10,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
   dados = s.recv(1024)
   print(f"{dados.decode()}")
 
+  s.sendall(bytes('/end', encoding='utf-8'))
+  s.close()
+
 
   
