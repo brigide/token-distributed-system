@@ -1,6 +1,6 @@
 import socket
 import time
-from Evaluation.helpers import Helpers
+from src.helpers.helpers import Helpers, ServerHelper
 
 class TokenGenerator:
     """
@@ -51,41 +51,14 @@ class TokenGenerator:
             and return it's response
         """
         try:
-            code = self.waitMessage(conn, 'waiting for data...') #recieves request from client
+            message = ServerHelper.waitMessage(conn) #recieves request from client
 
-            print(code)
+            code, n = Helpers.splitRequest(message)
 
-            self.sendMessage(conn, code)
-            self.closeConnection(conn, addr)
-
-            print('Aqui é server 2 porra')
+            ServerHelper.sendMessage(conn, str(Helpers.generateToken(code, n)))
 
         except Exception as error:
             print(error)
-
-
-    def waitMessage(self, conn, prefix=''):
-        """
-            function to handle and wait message from the client
-        """
-        conn.sendall(prefix.encode())
-        message = conn.recv(1024).decode()   
-        return message
-
-    def sendMessage(self, conn, message):
-        """
-            function to handle and send messages to the client
-        """
-        message += '\n'
-        conn.sendall(message.encode())
-
-
-    def closeConnection(self, conn, addr):
-        """
-            function to close client connection
-        """
-        conn.close()
-        print('\n' + str(addr) + ' disconnected')
 
     def closeServer(self):
         #closes server's socket

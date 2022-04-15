@@ -1,6 +1,6 @@
 import socket
 import time
-from Evaluation.helpers import Helpers
+from src.helpers.helpers import Helpers, ServerHelper
 
 class Evaluation:
     """
@@ -50,57 +50,29 @@ class Evaluation:
             this function handles every client from any thread
             and return it's response
         """
+        host = 'localhost'
+        port = 50003
         try:
-            request = self.waitMessage(conn, 'waiting for data...') #recieves request from client
+            request = ServerHelper.waitMessage(conn, 'waiting for data...') #recieves request from client
             code, n = Helpers.splitRequest(request)
 
             isValid = Helpers.evaluate(code, n)
 
             if not isValid:
-                self.sendMessage(conn, 'error: invalid parameter')
-                self.closeConnection(conn, addr)
+                ServerHelper.sendMessage(conn, 'error: invalid parameter')
+                ServerHelper.closeConnection(conn, addr)
                 return
 
-            print('passei caralho')
+            ServerHelper.sendMessage(conn, 'contacting token service...')
+            response = ServerHelper.sendRequest(host, port, request)
 
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.connect(("localhost", 50003))
-                print(s)
-                #s.sendall(b"Ola, mundo")
-                dados = s.recv(1024)
-                print(f"{dados.decode()}")
-                s.sendall(bytes(code, encoding='utf-8'))
-                dados = s.recv(1024)
-                print(f"{dados.decode()}")
-            
-            print("depois de voltar pro server 1")
+            ServerHelper.sendMessage(conn, 'token: ' + response)
+
+            ServerHelper.closeConnection(conn, addr)
+
 
         except Exception as error:
             print(error)
-
-
-    def waitMessage(self, conn, prefix=''):
-        """
-            function to handle and wait message from the client
-        """
-        conn.sendall(prefix.encode())
-        message = conn.recv(1024).decode()   
-        return message
-
-    def sendMessage(self, conn, message):
-        """
-            function to handle and send messages to the client
-        """
-        message += '\n'
-        conn.sendall(message.encode())
-
-
-    def closeConnection(self, conn, addr):
-        """
-            function to close client connection
-        """
-        conn.close()
-        print('\n' + str(addr) + ' disconnected')
 
     def closeServer(self):
         #closes server's socket

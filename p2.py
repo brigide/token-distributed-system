@@ -1,6 +1,6 @@
 import argparse, sys
 import _thread
-from Evaluation.evaluation import Evaluation
+from src.servers.tokenGenerator import TokenGenerator
 
 #defines localhost ip for the server
 
@@ -8,9 +8,9 @@ from Evaluation.evaluation import Evaluation
 
 host = 'localhost'
 #host = '169.254.92.100'
-port = 50002
+port = 50003
 
-parser=argparse.ArgumentParser()
+parser = argparse.ArgumentParser()
 
 parser.add_argument('-H', '--host', help='Host')
 parser.add_argument('-p', '--port', help='Port')
@@ -24,7 +24,7 @@ if args.port != None:
     port = int(args.port)
 
 
-server = Evaluation(host, port) #create server instance
+server = TokenGenerator(host, port) #create server instance
 
 server.createSocket() #create server's socket
 server.bindSocket() #actually create socket's connection
