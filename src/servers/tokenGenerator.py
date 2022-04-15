@@ -51,11 +51,12 @@ class TokenGenerator:
             and return it's response
         """
         try:
-            message = ServerHelper.waitMessage(conn) #recieves request from client
+            while True:
+                message = ServerHelper.waitMessage(conn) #recieves request from client
 
-            code, n = Helpers.splitRequest(message)
+                code, n = Helpers.splitRequest(message)
 
-            ServerHelper.sendMessage(conn, str(Helpers.generateToken(code, n)))
+                ServerHelper.sendMessage(conn, str(Helpers.generateToken(code, n)))
 
         except Exception as error:
             print(error)

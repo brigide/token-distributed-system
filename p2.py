@@ -1,4 +1,4 @@
-import argparse, sys
+import argparse
 import _thread
 from src.servers.tokenGenerator import TokenGenerator
 

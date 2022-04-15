@@ -51,7 +51,8 @@ class ServerHelper:
         """
             function to handle and wait message from the client
         """
-        conn.sendall(prefix.encode())
+        if prefix != '':
+            conn.sendall(prefix.encode())
         message = conn.recv(1024).decode()   
         return message
 
@@ -68,21 +69,19 @@ class ServerHelper:
         """
             function to close client connection
         """
-        conn.sendall('/end'.encode())
+        #conn.sendall('/end'.encode())
         conn.close()
         print('\n' + str(addr) + ' disconnected')
 
     @staticmethod
-    def sendRequest(host, port, message):
+    def sendRequest(connection, message):
         """
             send a request for the other socket process
         """
         try:
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as connection:
-                connection.connect((host, port))
-                connection.sendall(bytes(message, encoding='utf-8'))
-                response = connection.recv(1024)
-                return response.decode()
+            connection.sendall(bytes(message, encoding='utf-8'))
+            response = connection.recv(1024)
+            return response.decode()
 
         except Exception as error:
             print(error)

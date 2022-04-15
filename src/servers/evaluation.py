@@ -52,21 +52,24 @@ class Evaluation:
         """
         host = 'localhost'
         port = 50003
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect((host, port))
+
         try:
-            request = ServerHelper.waitMessage(conn, 'waiting for data...') #recieves request from client
-            code, n = Helpers.splitRequest(request)
+            while True:
+                request = ServerHelper.waitMessage(conn) #recieves request from client
+                code, n = Helpers.splitRequest(request)
 
-            isValid = Helpers.evaluate(code, n)
+                isValid = Helpers.evaluate(code, n)
 
-            if not isValid:
-                ServerHelper.sendMessage(conn, 'error: invalid parameter')
-                ServerHelper.closeConnection(conn, addr)
-                return
+                if not isValid:
+                    ServerHelper.sendMessage(conn, 'error: invalid parameter')
+                    ServerHelper.closeConnection(conn, addr)
+                    break
 
-            ServerHelper.sendMessage(conn, 'contacting token service...')
-            response = ServerHelper.sendRequest(host, port, request)
+                response = ServerHelper.sendRequest(s, request)
 
-            ServerHelper.sendMessage(conn, 'token: ' + response)
+                ServerHelper.sendMessage(conn, 'token: ' + response)
 
             ServerHelper.closeConnection(conn, addr)
 
