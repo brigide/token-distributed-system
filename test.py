@@ -79,11 +79,15 @@ def test():
     tokensPerSecondLabel = []
     timePerTokenLabel = []
     maxTokens = 0
+    maxTimeToGenerate = 0
+    maxSeconds = 0
     for i in range(len(iterations)):
         timePerToken = 0
         for j in range(len(timeAverage[i])):
             timePerToken += timeAverage[i][j]
-            #timePerTokenLabel.append(timeAverage[i][j])
+            if timeAverage[i][j] > maxTimeToGenerate:
+                maxTimeToGenerate = timeAverage[i][j]
+            timePerTokenLabel.append(timeAverage[i][j])
 
         print('iteration: ' + str(i + 1))
 
@@ -94,9 +98,12 @@ def test():
         if len(iterations[i]) > maxTokens:
             maxTokens = len(iterations[i])
 
+        if len(iterations[i]) / seconds > maxSeconds:
+            maxSeconds = len(iterations[i]) / seconds
+
         iterationLabel.append(i + 1)
         tokenCountLabel.append(len(iterations[i]))
-        timePerTokenLabel.append(timePerToken / len(timeAverage[i]))
+        #timePerTokenLabel.append(timePerToken / len(timeAverage[i]))
 
         tokensPerSecondLabel.append(len(iterations[i]) / seconds)
 
@@ -113,8 +120,6 @@ def test():
     print("variance: ", variancia)
     print("standard deviation: ", desvioPadrao)
 
-    print(np.linspace(0, len(iterations) + 1, 12))
-
     print('\n\nplotting...')
     fig, ((ax0, ax1), (ax2, ax3)) = plt.subplots(nrows=2, ncols=2, figsize=(15, 9))
 
@@ -123,25 +128,25 @@ def test():
     ax0.set_title('tokens per second')
     ax0.bar(iterationLabel, tokenCountLabel, width=0.5)
     ax0.set(xlim=(0, len(iterations) + 1), xticks=np.arange(0, len(iterations) + 1, 1),
-        ylim=(0, maxTokens), yticks=np.arange(1, maxTokens + 4))
+        ylim=(0, maxTokens + 2))
 
     ax1.set_xlabel('iterations')
     ax1.set_ylabel('average seconds')
     ax1.set_title('aproximate tokens per second')
     ax1.plot(iterationLabel, tokensPerSecondLabel)
-    ax1.set(xlim=(1, len(iterations)), xticks=np.arange(1, len(iterations) + 1),
-        ylim=(0, seconds + 2), yticks=np.arange(0, seconds + 2))
+    ax1.set(xlim=(1, len(iterations)), xticks=np.arange(1, len(iterations) + 1, 1),
+        ylim=(0, maxSeconds + 0.5))
 
     ax2.set_xlabel('iterations')
     ax2.set_ylabel('average seconds')
     ax2.set_title('time to generate per iteration')
-    ax2.plot(iterationLabel, timePerTokenLabel)
-    ax2.set(xlim=(1, len(iterations)), xticks=np.arange(1, len(iterations) + 1),
-        ylim=(0, seconds + 2), yticks=np.arange(0, seconds + 2))
+    ax2.plot(np.linspace(0, len(iterationLabel), len(timePerTokenLabel)), timePerTokenLabel)
+    ax2.set(xlim=(1, len(iterations)), xticks=np.arange(1, len(iterations) + 1, 1),
+        ylim=(0, maxTimeToGenerate + 0.3))
 
 
-    ax3.set_xlabel('standard deviation')
-    ax3.set_ylabel('token variation in iterations')
+    ax3.set_ylabel('standard deviation')
+    ax3.set_xlabel('token variation in iterations')
     ax3.set_title('standard deviation')
     ax3.plot(tokenCountLabel, normal.pdf(tokenCountLabel))
     # ax3.set(xlim=(1, len(iterations)), xticks=np.arange(1, len(iterations) + 1),
