@@ -67,20 +67,36 @@ def test():
     s.close()
 
     print('\n\nresults')
+
     x = []
     y = []
     maxTokens = 0
+    tokensPerIteration = []
     for i in range(len(iterations)):
         print('iteration: ' + str(i + 1))
 
         print('token count: ' + str(len(iterations[i])))
         print('average tokens per second: ' + str(len(iterations[i]) / seconds) + '\n')
 
+        tokensPerIteration.append(len(iterations[i]))
+
         if len(iterations[i]) > maxTokens:
             maxTokens = len(iterations[i])
 
         x.append(i + 1)
         y.append(len(iterations[i]))
+    
+    soma = sum(tokensPerIteration);
+    media = soma/len(tokensPerIteration)
+    variancia = 0
+    for i in range(len(tokensPerIteration)):
+        distancia = (tokensPerIteration[i]-media)**2
+        variancia += distancia
+    desvioPadrao = variancia/len(tokensPerIteration)
+
+    print("Média: ",media)
+    print("Variância: ",variancia)
+    print("Desvio padrão: ", desvioPadrao)
 
     fig, ax = plt.subplots()
     ax.set_xlabel('iterations')
@@ -90,5 +106,6 @@ def test():
     ax.set(xlim=(1, len(iterations)), xticks=np.arange(0, len(iterations) + 2),
         ylim=(0, maxTokens), yticks=np.arange(1, maxTokens + 4))
     plt.show()
+        
 
 test()
