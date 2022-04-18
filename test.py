@@ -93,7 +93,7 @@ def test():
 
         print('token count: ' + str(len(iterations[i])))
         print('average tokens per second: ' + str(len(iterations[i]) / seconds))
-        print('avarage time to generate: ' + str(timeAverage[i][0]) + '\n')
+        print('avarage time to generate: ' + str(timePerTokenLabel[i]) + '\n')
 
         if len(iterations[i]) > maxTokens:
             maxTokens = len(iterations[i])
