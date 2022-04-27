@@ -8,8 +8,8 @@ from scipy import stats
 
 def test():
     quantity = 100000
-    seconds = 10
-    iteration = 3
+    seconds = 5
+    iteration = 5
 
     parser = argparse.ArgumentParser()
 

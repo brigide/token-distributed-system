@@ -10,6 +10,11 @@ class TokenGenerator:
         self.host = host
         self.port = port
         self.socket = ""
+        self.primes = {}
+        with open('primes.txt', 'r') as file:
+            content = file.readlines()
+            for i in range(len(content)):
+                self.primes[int(content[i].strip('\n'))] = i
 
 
     def createSocket(self):
@@ -50,11 +55,7 @@ class TokenGenerator:
             this function handles every client from any thread
             and return it's response
         """
-        primes = {}
-        with open('primes.txt', 'r') as file:
-            content = file.readlines()
-            for prime in content:
-                primes[int(prime.strip('\n'))] = int(prime.strip('\n'))
+        
                 
         try:
             while True:
@@ -64,7 +65,7 @@ class TokenGenerator:
 
                 code, n = Helpers.splitRequest(message)
 
-                ServerHelper.sendMessage(conn, str(Helpers.generateToken(code, n, primes)))
+                ServerHelper.sendMessage(conn, str(Helpers.generateToken(code, n)))
                 
             ServerHelper.closeConnection(conn, addr)
 

@@ -13,77 +13,99 @@ class Helpers:
         return True
 
     @staticmethod
-    def generateToken(code, n, primes):
-        countBefore = 0
-        countAfter = 0
+    def generateToken(code, n, primes=None):
 
-        primeAfter = code
-        primeBefore = code
+        if primes != None and code > 75000000:
+            countBefore = 0
+            countAfter = 0
 
-        currentSum = code
-        currentSub = code
+            primeAfter = code
+            primeBefore = code
 
-        # while (countAfter < n or countBefore < n):
-        #     currentSum += 1
-        #     currentSub -= 1
+            currentSum = code
+            currentSub = code
 
-        #     if currentSum % 2 != 0 and currentSum % 10 == 5:
-        #         continue
-        #     else:
-        #         if isprime(currentSum):
-        #             countAfter += 1
-        #             if (countAfter == n):
-        #                 primeAfter = currentSum
-
-        #     if currentSub % 2 != 0 and currentSub % 10 == 5:
-        #         continue
-        #     else:        
-        #         if isprime(currentSub):
-        #             countBefore += 1
-        #             if (countBefore == n):
-        #                 primeBefore = currentSub
-
-        while countAfter < n:
-            currentSum += 1
-
-            while currentSum % 2 == 0 or currentSum % 10 == 5:
+            while countAfter < n:
                 currentSum += 1
 
-            if currentSum in primes:
-                countAfter += 1
-                if (countAfter == n):
-                    primeAfter = currentSum
-            else:
+                while currentSum % 2 == 0 or currentSum % 10 == 5:
+                    currentSum += 1
+
+                if currentSum in primes:
+                    countAfter += 1
+                    if (countAfter == n):
+                        primeAfter = currentSum
+                else:
+                    if isprime(currentSum):
+                        countAfter += 1
+                        if (countAfter == n):
+                            primeAfter = currentSum
+
+            while countBefore < n:
+                currentSub -= 1
+                while currentSub % 2 == 0 or currentSub % 10 == 5:
+                    currentSub -= 1
+                    
+                if currentSub in primes:
+                    countBefore += 1
+                    if (countBefore == n):
+                        primeBefore = currentSub
+                else:
+                    if isprime(currentSub):
+                        countBefore += 1
+                        if (countBefore == n):
+                            primeBefore = currentSub
+
+            return primeBefore * primeAfter
+
+
+        elif primes != None and code <= 75000000:
+            nextPrime = nextprime(code)
+            nToNextPrime = primes[nextPrime]
+            primeAfter = prime(nToNextPrime + n - 1)
+
+            prevPrime = prevprime(code)
+            nToPrevPrime = primes[prevPrime]
+            primeBefore = prime(nToPrevPrime - n - 1)
+
+            return primeBefore * primeAfter
+
+        elif primes == None:
+            print('none')
+            countBefore = 0
+            countAfter = 0
+
+            primeAfter = code
+            primeBefore = code
+
+            currentSum = code
+            currentSub = code
+
+            while countAfter < n:
+                currentSum += 1
+
+                while currentSum % 2 == 0 or currentSum % 10 == 5:
+                    currentSum += 1
+
                 if isprime(currentSum):
                     countAfter += 1
                     if (countAfter == n):
                         primeAfter = currentSum
 
-        while countBefore < n:
-            currentSub -= 1
-            while currentSub % 2 == 0 or currentSub % 10 == 5:
+            while countBefore < n:
                 currentSub -= 1
-                
-            if currentSub in primes:
-                countBefore += 1
-                if (countBefore == n):
-                    primeBefore = currentSub
-            else:
+                while currentSub % 2 == 0 or currentSub % 10 == 5:
+                    currentSub -= 1
+                    
                 if isprime(currentSub):
                     countBefore += 1
                     if (countBefore == n):
                         primeBefore = currentSub
 
-        # primeAfter = code
-        # primeBefore = code
+            return primeBefore * primeAfter
 
-        # for i in range(n):
-        #     primeAfter = nextprime(primeAfter)
-
-        # for i in range(n):
-        #     primeBefore = prevprime(primeBefore)
+        return 0
         
-        return primeBefore * primeAfter
 
 
     @staticmethod
