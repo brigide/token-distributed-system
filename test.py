@@ -32,8 +32,8 @@ def test():
     print('preparing data...')
     messages = []
     for i in range(quantity):
-        code = randint(10000000, 20000000)
-        n = randint(5000, 15000)
+        code = randint(10000000, 15000000)
+        n = randint(5000, 7500)
         messages.append(str(code) + '&' + str(n))
 
     print('preparing socket...')
@@ -93,7 +93,7 @@ def test():
 
         print('token count: ' + str(len(iterations[i])))
         print('average tokens per second: ' + str(len(iterations[i]) / seconds))
-        print('avarage time to generate: ' + str(timePerTokenLabel[i]) + '\n')
+        print(f'avarage time to generate: {timePerTokenLabel[i]:.2f}s\n')
 
         if len(iterations[i]) > maxTokens:
             maxTokens = len(iterations[i])

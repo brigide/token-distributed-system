@@ -79,7 +79,7 @@ class Evaluation:
 
 
         except Exception as error:
-            print(error)
+            ServerHelper.closeConnection(conn, addr)
 
     def closeServer(self):
         #closes server's socket

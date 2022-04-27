@@ -50,6 +50,12 @@ class TokenGenerator:
             this function handles every client from any thread
             and return it's response
         """
+        primes = {}
+        with open('primes.txt', 'r') as file:
+            content = file.readlines()
+            for prime in content:
+                primes[int(prime.strip('\n'))] = int(prime.strip('\n'))
+                
         try:
             while True:
                 message = ServerHelper.waitMessage(conn) #recieves request from client
@@ -58,12 +64,12 @@ class TokenGenerator:
 
                 code, n = Helpers.splitRequest(message)
 
-                ServerHelper.sendMessage(conn, str(Helpers.generateToken(code, n)))
+                ServerHelper.sendMessage(conn, str(Helpers.generateToken(code, n, primes)))
                 
             ServerHelper.closeConnection(conn, addr)
 
         except Exception as error:
-            print(error)
+            ServerHelper.closeConnection(conn, addr)
 
     def closeServer(self):
         #closes server's socket
