@@ -8,7 +8,7 @@ from scipy import stats
 
 def test():
     quantity = 100000
-    seconds = 5
+    seconds = 10
     iteration = 3
 
     parser = argparse.ArgumentParser()
@@ -148,7 +148,7 @@ def test():
     ax3.set_ylabel('standard deviation')
     ax3.set_xlabel('token variation in iterations')
     ax3.set_title('standard deviation')
-    ax3.plot(tokenCountLabel, normal.pdf(tokenCountLabel))
+    ax3.scatter(tokenCountLabel, normal.pdf(tokenCountLabel))
     # ax3.set(xlim=(1, len(iterations)), xticks=np.arange(1, len(iterations) + 1),
     #     ylim=(0, seconds + 2), yticks=np.arange(0, seconds + 2))
 
