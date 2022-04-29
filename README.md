@@ -24,7 +24,7 @@ There are also some options to run different tests.
 
 # Result example
 
-image here
+![alt text](https://github.com/brigide/token-distributed-system/blob/master/example.png)
 
 results
 iteration: 1
